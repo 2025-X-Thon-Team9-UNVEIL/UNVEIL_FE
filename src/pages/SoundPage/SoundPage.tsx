@@ -4,6 +4,7 @@ import axios from 'axios'; // 또는 사용 중인 axiosInstance
 import bad_audio from '@/assets/audio/test_bad_room.wav';
 import good_audio from '@/assets/audio/test_good_room.wav';
 import normal_audio from '@/assets/audio/test_normal_room.wav';
+import test_audio from '@/assets/audio/measurement_signal_5s.wav';
 
 // 스타일링을 위한 컴포넌트들 (가정)
 // import Header from '@/components/Header';
@@ -24,7 +25,7 @@ const SoundPage = () => {
   const timerIntervalRef = useRef<number | null>(null);
 
   // 🔊 테스트용 사운드 파일 로드 (경로는 실제 파일 위치에 맞게 수정)
-  const testAudio = useRef(new Audio(normal_audio));
+  const testAudio = useRef(new Audio(test_audio));
 
   // 타이머 로직
   const startTimer = () => {
@@ -141,13 +142,17 @@ const SoundPage = () => {
     setStatus('서버로 전송 중...');
 
     const formData = new FormData();
-    formData.append('file', file); // 백엔드에서 받을 키 이름 ('file')
+    formData.append('body', file); // 백엔드에서 받을 키 이름 ('file')
 
     try {
       // 실제 API 엔드포인트로 변경해주세요
-      const response = await axios.post('/api/analyze/reverb', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await axios.post(
+        'https://port-0-unveil-ai-mia4sbpyf7bf2574.sel3.cloudtype.app/api/noise',
+        formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        },
+      );
 
       console.log('업로드 성공:', response.data);
       setStatus('분석 완료!');
