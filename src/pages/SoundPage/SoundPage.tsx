@@ -218,6 +218,16 @@ const SoundPage = () => {
             {/* 1. 바로 들어보기 */}
             <audio src={audioUrl} controls className="w-60" />
 
+            {/* 👇 새 탭에서 열기 버튼 */}
+            <button
+              className="text-blue-500 underline text-sm"
+              onClick={() => {
+                const newWindow = window.open(audioUrl, '_blank');
+                if (!newWindow) alert('팝업이 차단되었습니다. 브라우저 설정을 확인해주세요.');
+              }}>
+              WAV 파일 새 탭에서 열기
+            </button>
+
             {/* 2. 내 컴퓨터/폰으로 다운로드해서 확인하기 */}
             <a href={audioUrl} download="room_acoustics.wav" className="text-blue-500 underline text-sm">
               WAV 파일 다운로드
