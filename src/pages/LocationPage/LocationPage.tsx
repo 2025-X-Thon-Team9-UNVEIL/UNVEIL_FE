@@ -7,13 +7,14 @@ import { useNavigate } from 'react-router-dom';
 
 const LocationPage = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
-  const markerRef = useRef<any>(null); // 마커를 저장해둘 ref (검색 시 위치 옮기기 위해)
+  const markerRef = useRef<any>(null);
 
   const navigate = useNavigate();
 
   // 상태 관리
   const [address, setAddress] = useState<string>(''); // 주소 텍스트 (검색어 입력용)
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
+  const [isSearched, setIsSearched] = useState<boolean>(false);
   const [mapInstance, setMapInstance] = useState<any>(null);
 
   // 주소 검색 함수 (텍스트 -> 좌표)
@@ -33,8 +34,11 @@ const LocationPage = () => {
         if (markerRef.current) {
           markerRef.current.setPosition(coords);
         }
+        setIsSearched(true);
+        setIsRegistered(false);
       } else {
         alert('검색 결과가 없습니다. 도로명이나 지번 주소를 정확히 입력해주세요.');
+        setIsSearched(false);
       }
     });
   };
@@ -43,6 +47,12 @@ const LocationPage = () => {
     if (e.key === 'Enter') {
       searchAddress();
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddress(e.target.value);
+    setIsSearched(false);
+    setIsRegistered(false);
   };
 
   useEffect(() => {
@@ -107,6 +117,7 @@ const LocationPage = () => {
 
   // 버튼 핸들러
   const handleRegister = () => {
+    if (!isSearched) return;
     if (!address) return alert('주소를 입력해주세요.');
     setIsRegistered(true);
   };
@@ -117,7 +128,7 @@ const LocationPage = () => {
 
   // 주소 보내기
   const handleNext = () => {
-    navigate('/safety', {
+    navigate('/sound', {
       state: { address: address },
     });
   };
@@ -137,7 +148,7 @@ const LocationPage = () => {
         <div className="relative">
           <Input
             value={address}
-            onChange={(e) => setAddress(e.target.value)}
+            onChange={handleInputChange}
             onKeyDown={handleKeyDown}
             className="w-full h-[50px] pl-5 pr-10"
             placeholder="위치 등록"
@@ -149,13 +160,17 @@ const LocationPage = () => {
         </div>
 
         {!isRegistered ? (
-          <Button onClick={handleRegister} className="h-11 w-full bg-Semi-Red mb-[24px]">
+          <Button
+            onClick={handleRegister}
+            className={`h-11 w-full mb-6 transition-colors duration-200 ${
+              isSearched ? 'bg-Semi-Red cursor-pointer' : 'bg-semi-pink cursor-not-allowed'
+            }`}>
             <Txt className="text-white" weight="semibold">
               위치 등록하기
             </Txt>
           </Button>
         ) : (
-          <div className="flex gap-2 mb-[24px]">
+          <div className="flex gap-2 mb-6">
             <Button onClick={handleRetry} className="flex-1 bg-Semi-Red h-11 ">
               <Txt className="text-white" weight="semibold">
                 다시 등록하기
