@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Button from '@/components/atoms/Button';
+import Txt from '@/components/atoms/Text';
 
 // 데이터
 import cctvDataRaw from '@/data/cctvData.json';
@@ -10,6 +10,28 @@ import lightDataRaw from '@/data/lightData.json';
 type MapData = { id: number; lat: number; lng: number; type: string };
 const cctvData = cctvDataRaw as MapData[];
 const lightData = lightDataRaw as MapData[];
+
+// Kakao Maps API 타입 정의
+type KakaoMap = {
+  getLevel: () => number;
+  getBounds: () => {
+    getSouthWest: () => { getLat: () => number; getLng: () => number };
+    getNorthEast: () => { getLat: () => number; getLng: () => number };
+  };
+  setCenter: (latlng: LatLng) => void;
+};
+
+type KakaoCircle = {
+  setMap: (map: KakaoMap | null) => void;
+};
+
+type LatLng = {
+  getLat: () => number;
+  getLng: () => number;
+};
+
+type GeocoderResult = Array<{ y: string; x: string }>;
+type GeocoderStatus = (typeof window.kakao.maps.services.Status)[keyof typeof window.kakao.maps.services.Status];
 
 // 도(degree)를 라디안(radian)으로 바꾸는 헬퍼 함수
 const toRadian = (degree: number) => (degree * Math.PI) / 180;
@@ -35,15 +57,16 @@ const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => 
 const SafetyMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const circlesRef = useRef<any[]>([]);
+  const circlesRef = useRef<KakaoCircle[]>([]);
 
-  const [mapInstance, setMapInstance] = useState<any>(null);
+  const [mapInstance, setMapInstance] = useState<KakaoMap | null>(null);
   const [showCCTV, setShowCCTV] = useState(true);
   const [showLight, setShowLight] = useState(true);
 
-  // 1. 고정하고 싶은 주소 설정
-  const [address, setAddress] = useState('서울특별시 종로구 인사동5길 20');
+  // 1. LocationPage에서 전달받은 주소 또는 기본값
+  const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
 
   // 2. [변경] targetLocation을 상태(State)로 변경 (초기값은 null 또는 기본값)
   const [targetLocation, setTargetLocation] = useState<{ lat: number; lng: number } | null>(null);
@@ -61,12 +84,12 @@ const SafetyMap = () => {
             center: defaultCenter,
             level: 3,
           };
-          const map = new window.kakao.maps.Map(mapContainer.current, options);
+          const map = new window.kakao.maps.Map(mapContainer.current, options) as KakaoMap;
           setMapInstance(map);
 
           const geocoder = new window.kakao.maps.services.Geocoder();
 
-          geocoder.addressSearch(address, function (result: any, status: any) {
+          geocoder.addressSearch(address, function (result: GeocoderResult, status: GeocoderStatus) {
             if (status === window.kakao.maps.services.Status.OK) {
               const newCoords = new window.kakao.maps.LatLng(result[0].y, result[0].x);
 
@@ -101,7 +124,7 @@ const SafetyMap = () => {
     } else {
       if (window.kakao && window.kakao.maps) initializeMap();
     }
-  }, []); // 의존성 배열 비움 (한 번만 실행)
+  }, [address]); // address가 변경되면 지도 업데이트
 
   // 4. 안전 구역 렌더링 (targetLocation이 업데이트되면 다시 그려질 수도 있음)
   useEffect(() => {
@@ -133,7 +156,7 @@ const SafetyMap = () => {
           strokeWeight: 0,
           fillColor: color,
           fillOpacity: 0.5,
-        });
+        }) as KakaoCircle;
 
         circle.setMap(mapInstance);
         circlesRef.current.push(circle);
@@ -213,40 +236,46 @@ const SafetyMap = () => {
   return (
     <div className="relative h-screen w-[402px] bg-white overflow-hidden">
       {/* 상단 UI */}
-      <div className="absolute top-0 left-0 z-20 w-full pt-12 px-4 pb-4 bg-white">
-        <div className="inline-flex h-[45px] w-[355px] items-center justify-center rounded-xl relative mb-4">
-          <ArrowLeft className="absolute left-0 text-black cursor-pointer" onClick={() => navigate(-1)} />
-          <p className="text-lg font-bold">안전도 분석</p>
+      <header className="fixed top-0 left-0 right-0 z-20 w-full bg-white">
+        <div className="relative flex h-[56px] items-center justify-center">
+          <button type="button" onClick={() => navigate(-1)} className="absolute left-4 flex items-center">
+            <img src="/icons/back.svg" alt="뒤로가기" className="w-3" />
+          </button>
+          <Txt className="text-xl">측정 목록</Txt>
         </div>
-        <Button className="w-full bg-Semi-Red text-white">{address}</Button>
+      </header>
+
+      {/* 주소 표시 */}
+      <div className="fixed top-[56px] left-0 right-0 z-20 w-full px-4 pt-4 bg-white">
+        <Button className="w-full bg-button-pink border border-semi-red text-white">{address}</Button>
       </div>
 
       {/* 하단 UI */}
-      <div className="absolute bottom-0 left-0 z-20 w-full px-4 pb-8 pt-4 bg-white">
+      <div className="absolute bottom-0 left-0 z-20 w-full px-4 pb-8 pt-2 bg-white">
         <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
           <div className="flex justify-between items-center px-10">
             <div
               onClick={() => setShowCCTV(!showCCTV)}
               className={`flex flex-col items-center gap-1 cursor-pointer ${showCCTV ? 'opacity-100 ' : 'opacity-30 '}`}>
               <div className="w-5 h-5 rounded-full bg-[#2196F3]"></div>
-              <span className="font-semibold">CCTV 구역</span>
+              <Txt className="text-sm">CCTV 구역</Txt>
             </div>
 
             <div
               onClick={() => setShowLight(!showLight)}
               className={`flex flex-col items-center gap-1 cursor-pointer ${showLight ? 'opacity-100 ' : 'opacity-30 '}`}>
               <div className="w-5 h-5 rounded-full bg-[#FFEE58]"></div>
-              <span className="font-semibold">가로등 구역</span>
+              <Txt className="text-sm">가로등 구역</Txt>
             </div>
           </div>
         </div>
 
         <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
-          세부 점수 보러가기
+          세부 점수 보기
         </Button>
       </div>
 
-      <div ref={mapContainer} className="absolute inset-0 w-full h-full z-10" />
+      <div ref={mapContainer} className="absolute top-[120px] left-0 right-0 bottom-[180px] w-full z-10" />
     </div>
   );
 };

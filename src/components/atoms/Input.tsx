@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import type { InputHTMLAttributes, Ref } from 'react';
+import type { ComponentPropsWithoutRef } from 'react';
 
 const baseClasses = `
     bg-white
@@ -16,8 +16,7 @@ type Props = {
   height?: number;
   className?: string;
   size?: number;
-  ref?: Ref<HTMLInputElement | null>;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, 'size'>;
+} & Omit<ComponentPropsWithoutRef<'input'>, 'size' | 'style'>;
 
 export default function Input({ placeholder, className, ...props }: Props) {
   return <input placeholder={placeholder} className={cn(baseClasses, className)} {...props} />;
