@@ -1,11 +1,15 @@
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import { useEffect, useRef, useState } from 'react';
-import { Search } from 'lucide-react';
+import Footer from '@/components/Footer';
+import Txt from '@/components/atoms/Text';
+import { useNavigate } from 'react-router-dom';
 
-const KakaoMap = () => {
+const LocationPage = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const markerRef = useRef<any>(null); // 마커를 저장해둘 ref (검색 시 위치 옮기기 위해)
+
+  const navigate = useNavigate();
 
   // 상태 관리
   const [address, setAddress] = useState<string>(''); // 주소 텍스트 (검색어 입력용)
@@ -62,24 +66,6 @@ const KakaoMap = () => {
             geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
           };
 
-          // 지도 중심 변경(드래그) 시 주소 업데이트
-          window.kakao.maps.event.addListener(map, 'idle', function () {
-            searchDetailAddrFromCoords(map.getCenter(), function (result: any, status: any) {
-              if (status === window.kakao.maps.services.Status.OK) {
-                const detailAddr = result[0].road_address
-                  ? result[0].road_address.address_name
-                  : result[0].address.address_name;
-
-                // 사용자가 검색 중이 아닐 때만(드래그로 이동했을 때만) 주소창 업데이트
-                // (이 부분이 없으면 타자 칠 때마다 주소가 덮어씌워질 수 있음, 필요에 따라 조정)
-                setAddress(detailAddr);
-
-                // 마커도 지도 중심으로 따라오게 하려면:
-                marker.setPosition(map.getCenter());
-              }
-            });
-          });
-
           // 초기 내 위치 가져오기
           if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition((position) => {
@@ -129,13 +115,25 @@ const KakaoMap = () => {
     setIsRegistered(false);
   };
 
+  // 주소 보내기
   const handleNext = () => {
-    alert(`"${address}" 위치로 설정을 완료합니다!`);
+    navigate('/safety', {
+      state: { address: address },
+    });
   };
 
   return (
-    <div className="relative h-screen w-[402px] pt-[47px]">
-      <div className="absolute top-0 left-0 z-20 w-full bg-white px-6 pt-12 pb-8 flex flex-col gap-4">
+    <div className="w-[341px] flex min-h-screen flex-col bg-white">
+      {/* 로고 */}
+      <div className="flex items-center gap-2 pt-15">
+        <img src="/icons/logo.svg" alt="로고" className="w-30" />
+      </div>
+      <Txt weight="bold" className="text-base mt-4 mb-8 text-left">
+        보이지 않던 자취 리스크,
+        <br />
+        이제는 미리 보고 고르세요.
+      </Txt>
+      <div className="w-full flex flex-col gap-4 ">
         <div className="relative">
           <Input
             value={address}
@@ -145,32 +143,38 @@ const KakaoMap = () => {
             placeholder="위치 등록"
           />
 
-          <Search
-            onClick={searchAddress}
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors"
-            size={20}
-          />
+          <button onClick={searchAddress} className="absolute right-4 top-1/2 -translate-y-1/2">
+            <img src="/icons/search.svg" alt="검색" />
+          </button>
         </div>
 
         {!isRegistered ? (
-          <Button onClick={handleRegister} className="h-11 w-full bg-Semi-Red">
-            위치 등록하기
+          <Button onClick={handleRegister} className="h-11 w-full bg-Semi-Red mb-[24px]">
+            <Txt className="text-white" weight="semibold">
+              위치 등록하기
+            </Txt>
           </Button>
         ) : (
-          <div className="flex gap-2">
-            <Button onClick={handleRetry} className="flex-1 bg-Semi-Red h-11">
-              다시 등록하기
+          <div className="flex gap-2 mb-[24px]">
+            <Button onClick={handleRetry} className="flex-1 bg-Semi-Red h-11 ">
+              <Txt className="text-white" weight="semibold">
+                다시 등록하기
+              </Txt>
             </Button>
             <Button onClick={handleNext} className="flex-1 bg-Semi-Red text-white">
-              다음으로 넘어가기
+              <Txt className="text-white" weight="semibold">
+                다음으로 넘어가기
+              </Txt>
             </Button>
           </div>
         )}
       </div>
-
-      <div ref={mapContainer} className="w-full h-full" />
+      <div className="flex-1 relative w-full">
+        <div ref={mapContainer} className="absolute inset-0 w-full h-full" />
+      </div>
+      <Footer />
     </div>
   );
 };
 
-export default KakaoMap;
+export default LocationPage;
