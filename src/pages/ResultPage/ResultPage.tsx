@@ -13,14 +13,15 @@ export default function ResultPage() {
 
   // SafetyPage에서 전달받은 데이터
   const address = (location.state as { address?: string } | null)?.address || '';
+  const noiseLevel = (location.state as { noiseLevel?: string } | null)?.noiseLevel || 'A';
   const cctvGrade = (location.state as { cctvGrade?: string } | null)?.cctvGrade || 'F';
   const lightGrade = (location.state as { lightGrade?: string } | null)?.lightGrade || 'F';
 
   // 음향 등급 더미 데이터 (실제로는 음향 측정 결과를 받아와야 함)
-  const soundGrade = 'B'; // 더미 데이터
+  //const soundGrade = 'B'; // 더미 데이터
 
   // 최종 등급 계산
-  const totalGrade = calculateTotalGrade(soundGrade, cctvGrade, lightGrade);
+  const totalGrade = calculateTotalGrade(noiseLevel, cctvGrade, lightGrade);
 
   // 측정 목록에 추가 핸들러
   const handleAddToList = () => {
@@ -64,7 +65,7 @@ export default function ResultPage() {
       {/* 삼각형 등급 카드 */}
       <div className="pt-[170px] pb-8">
         <TriangleGradeCard
-          soundGrade={soundGrade}
+          soundGrade={noiseLevel}
           cctvGrade={cctvGrade}
           lightGrade={lightGrade}
           totalGrade={totalGrade}
