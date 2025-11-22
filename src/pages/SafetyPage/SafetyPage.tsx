@@ -7,6 +7,7 @@ import Txt from '@/components/atoms/Text';
 import cctvDataRaw from '@/data/cctvData.json';
 import lightDataRaw from '@/data/lightData.json';
 import SafetyScoreCard from './components/SafetyScoreCard';
+import { useSafetyMeasurement } from './hooks/useSafetyMeasurement';
 
 type MapData = { id: number; lat: number; lng: number; type: string };
 const cctvData = cctvDataRaw as MapData[];
@@ -33,27 +34,6 @@ type LatLng = {
 
 type GeocoderResult = Array<{ y: string; x: string }>;
 type GeocoderStatus = (typeof window.kakao.maps.services.Status)[keyof typeof window.kakao.maps.services.Status];
-
-// 도(degree)를 라디안(radian)으로 바꾸는 헬퍼 함수
-const toRadian = (degree: number) => (degree * Math.PI) / 180;
-const getDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
-  const earthRadius = 6371000; // 지구 반지름 (단위: m)
-
-  // 1. 위도/경도를 라디안 단위로 변환
-  const lat1Rad = toRadian(lat1);
-  const lat2Rad = toRadian(lat2);
-  // 2. 두 지점 사이의 차이 (거리)
-  const latDiff = toRadian(lat2 - lat1);
-  const lngDiff = toRadian(lng2 - lng1);
-  // 3. 하버사인 공식 (Haversine Formula) 적용
-  // a: 두 지점 사이의 거리의 제곱 반값 (중간 계산값)
-  const a =
-    Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-    Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
-  // c: 각거리 (angular distance)
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return earthRadius * c; // 최종 거리 (미터)
-};
 
 const SafetyMap = () => {
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -188,42 +168,16 @@ const SafetyMap = () => {
     };
   }, [mapInstance, showCCTV, showLight, targetLocation]); // targetLocation이 잡히면 다시 그릴 수 있도록 추가
 
+  // 안전도 측정 결과
+  const measurementResult = useSafetyMeasurement(targetLocation, 100);
+
   // 5. 점수 계산 및 이동
   const handleShowDetail = () => {
     if (!targetLocation) return alert('위치 정보를 불러오는 중입니다. 잠시만 기다려주세요.');
 
-    const radius = 100; // 100m 반경
-
-    const nearbyCCTV = cctvData.filter(
-      (item) => getDistance(targetLocation.lat, targetLocation.lng, item.lat, item.lng) <= radius,
-    ).length;
-
-    const nearbyLights = lightData.filter(
-      (item) => getDistance(targetLocation.lat, targetLocation.lng, item.lat, item.lng) <= radius,
-    ).length;
-
-    const getGrade = (count: number, type: 'cctv' | 'light') => {
-      if (type === 'cctv') {
-        if (count >= 10) return 'A';
-        if (count >= 6) return 'B';
-        if (count >= 3) return 'C';
-        if (count >= 1) return 'D';
-        return 'F';
-      } else {
-        if (count >= 30) return 'A';
-        if (count >= 20) return 'B';
-        if (count >= 10) return 'C';
-        if (count >= 5) return 'D';
-        return 'F';
-      }
-    };
-
-    const calculatedCctvGrade = getGrade(nearbyCCTV, 'cctv');
-    const calculatedLightGrade = getGrade(nearbyLights, 'light');
-
     // 결과 상태 업데이트
-    setCctvGrade(calculatedCctvGrade);
-    setLightGrade(calculatedLightGrade);
+    setCctvGrade(measurementResult.cctvGrade);
+    setLightGrade(measurementResult.lightGrade);
     setShowScore(true);
   };
 
