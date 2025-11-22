@@ -11,10 +11,11 @@ export const publicRoutes: RouteObject[] = [
     children: [
       { index: true, element: <lazyRoutes.MainPage /> },
       { path: 'test', element: <lazyRoutes.TestPage /> },
-      { path: 'signin', element: <lazyRoutes.SigninPage /> },
-      { path: 'signup', element: <lazyRoutes.SignupPage /> },
     ],
   },
+
+  { path: 'signin', element: <lazyRoutes.SigninPage /> },
+  { path: 'signup', element: <lazyRoutes.SignupPage /> },
 ];
 
 export const protectedRoutes: RouteObject[] = [
