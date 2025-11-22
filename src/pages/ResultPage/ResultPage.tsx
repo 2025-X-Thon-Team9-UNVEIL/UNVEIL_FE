@@ -62,7 +62,7 @@ export default function ResultPage() {
       </div>
 
       {/* 삼각형 등급 카드 */}
-      <div className="pt-[140px] pb-8">
+      <div className="pt-[170px] pb-8">
         <TriangleGradeCard
           soundGrade={soundGrade}
           cctvGrade={cctvGrade}

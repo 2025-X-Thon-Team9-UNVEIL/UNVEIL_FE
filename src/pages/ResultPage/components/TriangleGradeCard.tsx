@@ -11,17 +11,17 @@ interface TriangleGradeCardProps {
 const getGradeColor = (grade: string) => {
   switch (grade) {
     case 'A':
-      return 'bg-green-500';
+      return 'bg-[#B0D2FF]';
     case 'B':
-      return 'bg-blue-500';
+      return 'bg-[#C8B0FF]';
     case 'C':
-      return 'bg-yellow-500';
+      return 'bg-[#FFE682]';
     case 'D':
-      return 'bg-orange-500';
+      return 'bg-[#FEAAAB]';
     case 'F':
-      return 'bg-red-500';
+      return 'bg-[#FF7070]';
     default:
-      return 'bg-gray-400';
+      return 'bg-[#E5E7EB]';
   }
 };
 
@@ -69,8 +69,8 @@ export default function TriangleGradeCard({ soundGrade, cctvGrade, lightGrade, t
           <polygon
             points="100,10 190,163 10,163"
             fill="url(#triangleGradient)"
-            stroke="#d1d5db"
-            strokeWidth="3"
+            stroke="#FF5C7A"
+            strokeWidth="1"
             className="opacity-60"
           />
         </svg>
@@ -96,7 +96,7 @@ export default function TriangleGradeCard({ soundGrade, cctvGrade, lightGrade, t
               {cctvGrade}
             </Txt>
           </div>
-          <Txt weight="medium" className="text-sm text-Hana-Black text-center whitespace-nowrap">
+          <Txt weight="medium" className="text-sm text-center whitespace-nowrap">
             CCTV
           </Txt>
         </div>
