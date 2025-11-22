@@ -14,9 +14,9 @@ export default function SigninPage() {
   };
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center min-h-screen pt-[91px]">
       {/* 로고 */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 ">
         <img src="/icons/logo.svg" alt="로고" className="w-45" />
       </div>
 
@@ -38,7 +38,7 @@ export default function SigninPage() {
               maxLength={50}
               value={username}
               onChange={(e) => setUserName(e.target.value)}
-              className="text-Hana-Black placeholder:text-Icon-Detail mt-2.5 mb-12 h-12 w-75 pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
+              className="text-Hana-Black placeholder:text-Icon-Detail mt-2.5 mb-[35px] h-12 w-75 pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
             />
           </div>
 
@@ -57,7 +57,7 @@ export default function SigninPage() {
               maxLength={50}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="text-Hana-Black placeholder:text-Icon-Detail mt-2.5 mb-12 h-12 w-75 pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
+              className="text-Hana-Black placeholder:text-Icon-Detail mt-2.5 mb-12.5 h-12 w-75 pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
             />
           </div>
 
@@ -67,12 +67,12 @@ export default function SigninPage() {
           </Button>
 
           {/* 회원가입으로 이동 */}
-          <div className="flex items-center justify-center pt-7">
+          <div className="flex items-center justify-center pt-[64px]">
             <Txt weight="medium" className="text-Icon-Detail text-base leading-none">
-              가입한 계정이 없으신가요?
+              계정이 없으신가요?
             </Txt>
 
-            <Link to="/signup" className="ml-3.5 pb-1">
+            <Link to="/signup" className="ml-11.5 pb-1">
               <Txt
                 weight="medium"
                 className="text-Icon-Detail align-middle text-base leading-none underline underline-offset-2">
