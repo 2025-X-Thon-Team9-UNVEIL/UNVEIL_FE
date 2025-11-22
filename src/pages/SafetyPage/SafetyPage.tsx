@@ -220,26 +220,28 @@ const SafetyMap = () => {
           </div>
         )}
 
-        {/* 버튼 위치에 카드 또는 버튼 표시 */}
-        {!showScore ? (
-          <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
-            세부 점수 보기
-          </Button>
-        ) : (
-          <>
-            <SafetyScoreCard lightGrade={lightGrade} cctvGrade={cctvGrade} />
-            <Button
-              className="w-full bg-Semi-Red text-white mt-4"
-              onClick={() => {
-                // 다음 페이지로 이동
-                navigate('/result', {
-                  state: { address, cctvGrade, lightGrade },
-                });
-              }}>
-              최종 결과 보기
+        {/* 버튼 위치에 카드 또는 버튼 표시 - 같은 위치에 나타나도록 */}
+        <div className="relative">
+          {!showScore ? (
+            <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
+              세부 점수 보기
             </Button>
-          </>
-        )}
+          ) : (
+            <div className="w-full">
+              <SafetyScoreCard lightGrade={lightGrade} cctvGrade={cctvGrade} />
+              <Button
+                className="w-full bg-Semi-Red text-white mt-4"
+                onClick={() => {
+                  // 다음 페이지로 이동
+                  navigate('/result', {
+                    state: { address, cctvGrade, lightGrade },
+                  });
+                }}>
+                최종 결과 보기
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div ref={mapContainer} className="absolute top-[120px] left-0 right-0 bottom-[180px] w-full z-10" />
