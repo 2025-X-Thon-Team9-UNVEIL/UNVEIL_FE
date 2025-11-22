@@ -17,6 +17,9 @@ export const publicRoutes: RouteObject[] = [
       { path: 'measure', element: <lazyRoutes.MeasurePage /> },
     ],
   },
+
+  { path: 'signin', element: <lazyRoutes.SigninPage /> },
+  { path: 'signup', element: <lazyRoutes.SignupPage /> },
 ];
 
 export const protectedRoutes: RouteObject[] = [
