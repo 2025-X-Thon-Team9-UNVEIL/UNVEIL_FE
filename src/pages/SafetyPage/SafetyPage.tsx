@@ -70,9 +70,7 @@ const SafetyMap = () => {
   const [cctvGrade, setCctvGrade] = useState<string>('');
 
   // 1. LocationPage에서 전달받은 주소 또는 기본값
-  // const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
-  const receivedAddress = location.state?.address;
-  const [address, setAddress] = useState(receivedAddress);
+  const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
   // 2. [변경] targetLocation을 상태(State)로 변경 (초기값은 null 또는 기본값)
   const [targetLocation, setTargetLocation] = useState<{ lat: number; lng: number } | null>(null);
 
