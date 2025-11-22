@@ -34,7 +34,7 @@ export default function SignUpPage() {
   };
 
   return (
-    <main className="flex flex-col items-center">
+    <main className="flex flex-col items-center min-h-screen pt-[47px]">
       {/* 로고 */}
       <div className="flex items-center gap-2 mb-11">
         <img src="/icons/logo.svg" alt="로고" className="w-45" />
@@ -98,9 +98,6 @@ export default function SignUpPage() {
           {/* 비밀번호 확인 */}
           <div>
             <label className="block">
-              <label className="block">
-                <Txt className="block pb-2 text-xl">비밀번호 확인</Txt>
-              </label>
               <Input
                 type="password"
                 placeholder="비밀번호를 확인해주세요"
@@ -112,6 +109,21 @@ export default function SignUpPage() {
                 className="text-Hana-Black placeholder:text-Icon-Detail mb-5 h-[50px] w-full pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
               />
             </label>
+          </div>
+           {/* 전화번호 */}
+          <div>
+            <label className="block">
+              <Txt className="block pb-2 text-xl">전화번호</Txt>
+            </label>
+            <Input
+              type="text"
+              placeholder="전화번호를 입력해주세요"
+              required
+              maxLength={50}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="text-Hana-Black placeholder:text-Icon-Detail mb-5 h-[50px] w-full pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
+            />
           </div>
 
           {/* 에러 메시지 */}
@@ -131,9 +143,9 @@ export default function SignUpPage() {
           {/* 로그인으로 이동 */}
           <div className="flex items-center justify-center pt-4">
             <Txt weight="medium" className="text-Icon-Detail text-base">
-              계정이 이미 있으신가요?
+              가입한 계정이 이미 있으신가요?
             </Txt>
-            <Link to="/signin" className="pb-1 pl-3.5">
+            <Link to="/signin" className="pb-1 pl-5">
               <Txt weight="medium" className="text-Icon-Detail align-middle text-base underline underline-offset-2">
                 로그인
               </Txt>
