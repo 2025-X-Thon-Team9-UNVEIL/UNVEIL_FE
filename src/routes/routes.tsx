@@ -6,6 +6,7 @@ export const lazyRoutes = {
   MyPage: React.lazy(() => import('../pages/MyPage/MyPage')),
   NotFoundPage: React.lazy(() => import('../pages/NotFoundPage/NotFoundPage')),
   LocationPage: React.lazy(() => import('../pages/LocationPage/LocationPage.tsx')),
+  SafetyPage: React.lazy(() => import('../pages/SafetyPage/SafetyPage.tsx')),
   SigninPage: React.lazy(() => import('../pages/SigninPage/SigninPage')),
   SignupPage: React.lazy(() => import('../pages/SignupPage/SignupPage.tsx')),
 };
