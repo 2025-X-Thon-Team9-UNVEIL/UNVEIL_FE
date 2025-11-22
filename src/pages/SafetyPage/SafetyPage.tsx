@@ -199,7 +199,7 @@ const SafetyMap = () => {
       </div>
 
       {/* 하단 UI */}
-      <div className="absolute bottom-0 left-0 z-20 w-full px-4 pb-8 pt-2 bg-white">
+      <div className="fixed bottom-0 left-0 z-20 w-full px-4 pb-8 pt-2 bg-white">
         {!showScore && (
           <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
             <div className="flex justify-between items-center px-10">
