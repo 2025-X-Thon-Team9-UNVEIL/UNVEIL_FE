@@ -70,8 +70,9 @@ const SafetyMap = () => {
   const [cctvGrade, setCctvGrade] = useState<string>('');
 
   // 1. LocationPage에서 전달받은 주소 또는 기본값
-  const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
-
+  // const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
+  const receivedAddress = location.state?.address;
+  const [address, setAddress] = useState(receivedAddress);
   // 2. [변경] targetLocation을 상태(State)로 변경 (초기값은 null 또는 기본값)
   const [targetLocation, setTargetLocation] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -247,35 +248,36 @@ const SafetyMap = () => {
 
       {/* 하단 UI */}
       <div className="absolute bottom-0 left-0 z-20 w-full px-4 pb-8 pt-2 bg-white">
-        {!showScore ? (
-          <>
-            <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
-              <div className="flex justify-between items-center px-10">
-                <div
-                  onClick={() => setShowCCTV(!showCCTV)}
-                  className={`flex flex-col items-center gap-1 cursor-pointer ${showCCTV ? 'opacity-100 ' : 'opacity-30 '}`}>
-                  <div className="w-5 h-5 rounded-full bg-[#2196F3]"></div>
-                  <Txt className="text-sm">CCTV 구역</Txt>
-                </div>
+        {!showScore && (
+          <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
+            <div className="flex justify-between items-center px-10">
+              <div
+                onClick={() => setShowCCTV(!showCCTV)}
+                className={`flex flex-col items-center gap-1 cursor-pointer ${showCCTV ? 'opacity-100 ' : 'opacity-30 '}`}>
+                <div className="w-5 h-5 rounded-full bg-[#2196F3]"></div>
+                <Txt className="text-sm">CCTV 구역</Txt>
+              </div>
 
-                <div
-                  onClick={() => setShowLight(!showLight)}
-                  className={`flex flex-col items-center gap-1 cursor-pointer ${showLight ? 'opacity-100 ' : 'opacity-30 '}`}>
-                  <div className="w-5 h-5 rounded-full bg-[#FFEE58]"></div>
-                  <Txt className="text-sm">가로등 구역</Txt>
-                </div>
+              <div
+                onClick={() => setShowLight(!showLight)}
+                className={`flex flex-col items-center gap-1 cursor-pointer ${showLight ? 'opacity-100 ' : 'opacity-30 '}`}>
+                <div className="w-5 h-5 rounded-full bg-[#FFEE58]"></div>
+                <Txt className="text-sm">가로등 구역</Txt>
               </div>
             </div>
+          </div>
+        )}
 
-            <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
-              세부 점수 보기
-            </Button>
-          </>
+        {/* 버튼 위치에 카드 또는 버튼 표시 */}
+        {!showScore ? (
+          <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
+            세부 점수 보기
+          </Button>
         ) : (
           <>
             <SafetyScoreCard lightGrade={lightGrade} cctvGrade={cctvGrade} />
             <Button
-              className="w-full bg-Semi-Red text-white"
+              className="w-full bg-Semi-Red text-white mt-4"
               onClick={() => {
                 // 다음 페이지로 이동
                 navigate('/result', {
