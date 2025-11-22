@@ -6,6 +6,9 @@ import { useNavigate } from 'react-router-dom';
 export default function MainPage() {
   const navigate = useNavigate();
 
+  const handleNext = () => {
+    navigate('/location');
+  };
   return (
     <div className="flex min-h-screen flex-col bg-white">
       {/* 로고 */}
@@ -18,9 +21,7 @@ export default function MainPage() {
         이제는 미리 보고 고르세요.
       </Txt>
 
-      <div
-        className="w-[341px] rounded-xl bg-banner-purple p-6 mb-7 cursor-pointer"
-        onClick={() => navigate('/location')}>
+      <div className="w-[341px] rounded-xl bg-banner-purple p-6 mb-7" onClick={handleNext}>
         <div className="flex items-center justify-center mb-4">
           <img src="/icons/home.svg" alt="진단" className="w-30" />
         </div>
