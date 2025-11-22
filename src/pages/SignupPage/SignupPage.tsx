@@ -1,17 +1,20 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Txt from '@/components/atoms/Text';
 import { useState, type FormEvent } from 'react';
+import { signUp } from '@/apis/auth';
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secondPassword, setSecondPassword] = useState('');
+  const [phone, setPhone] = useState(''); // UI 입력용 (서버엔 안보냄)
   const [error, setError] = useState('');
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
 
@@ -27,10 +30,13 @@ export default function SignUpPage() {
       return;
     }
 
-    // ✅ 여기서부터는 실제 API 연동 시에만 작성
-    // 예: signup(name, email, password) 호출 후 navigate('/signin') 등
-    console.log('회원가입 폼 값:', { name, email, password });
-    alert('검증만 통과한 상태입니다. 실제 연동 로직은 TODO 입니다.');
+    try {
+      await signUp({ email, password });
+      alert('회원가입이 완료되었습니다!');
+      navigate('/signin');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -110,7 +116,7 @@ export default function SignUpPage() {
               />
             </label>
           </div>
-           {/* 전화번호 */}
+          {/* 전화번호 */}
           <div>
             <label className="block">
               <Txt className="block pb-2 text-xl">전화번호</Txt>
@@ -120,8 +126,8 @@ export default function SignUpPage() {
               placeholder="전화번호를 입력해주세요"
               required
               maxLength={50}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               className="text-Hana-Black placeholder:text-Icon-Detail mb-5 h-[50px] w-full pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
             />
           </div>

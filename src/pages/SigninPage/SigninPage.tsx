@@ -1,16 +1,32 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Button from '@/components/atoms/Button';
 import Input from '@/components/atoms/Input';
 import Txt from '@/components/atoms/Text';
 import { useState, type FormEvent } from 'react';
+import { login } from '@/apis/auth';
 
 export default function SigninPage() {
-  const [username, setUserName] = useState('');
-  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [, /*error*/ setError] = useState('');
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: 여기서 로그인 로직 실행 (ex. formLogin(username, password))
+    setError('');
+    try {
+      const data = await login({ email, password });
+
+      localStorage.setItem('accessToken', data.accessToken);
+      localStorage.setItem('refreshToken', data.refreshToken);
+
+      alert('로그인 성공!');
+      navigate('/');
+    } catch (err) {
+      console.error(err);
+      setError('이메일 또는 비밀번호를 확인해주세요.');
+    }
   };
 
   return (
@@ -36,8 +52,8 @@ export default function SigninPage() {
               autoComplete="email"
               required
               maxLength={50}
-              value={username}
-              onChange={(e) => setUserName(e.target.value)}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="text-Hana-Black placeholder:text-Icon-Detail mt-2.5 mb-[35px] h-12 w-75 pl-5 font-[AppleSDGothicNeoM] text-lg placeholder:font-[AppleSDGothicNeoM] placeholder:text-lg"
             />
           </div>
