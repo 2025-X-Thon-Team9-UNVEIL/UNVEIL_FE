@@ -11,7 +11,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [secondPassword, setSecondPassword] = useState('');
-  const [phone, setPhone] = useState(''); // UI 입력용 (서버엔 안보냄)
+  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -25,8 +25,8 @@ export default function SignUpPage() {
     }
 
     // 비밀번호 길이 검증
-    if (password.length < 6) {
-      setError('비밀번호는 최소 6자 이상이어야 합니다.');
+    if (password.length < 8) {
+      setError('비밀번호는 최소 8자 이상이어야 합니다.');
       return;
     }
 
