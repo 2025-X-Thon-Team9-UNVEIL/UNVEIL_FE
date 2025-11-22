@@ -6,6 +6,7 @@ import Txt from '@/components/atoms/Text';
 // 데이터
 import cctvDataRaw from '@/data/cctvData.json';
 import lightDataRaw from '@/data/lightData.json';
+import SafetyScoreCard from './components/SafetyScoreCard';
 
 type MapData = { id: number; lat: number; lng: number; type: string };
 const cctvData = cctvDataRaw as MapData[];
@@ -64,6 +65,9 @@ const SafetyMap = () => {
   const [mapInstance, setMapInstance] = useState<KakaoMap | null>(null);
   const [showCCTV, setShowCCTV] = useState(true);
   const [showLight, setShowLight] = useState(true);
+  const [showScore, setShowScore] = useState(false);
+  const [lightGrade, setLightGrade] = useState<string>('');
+  const [cctvGrade, setCctvGrade] = useState<string>('');
 
   // 1. LocationPage에서 전달받은 주소 또는 기본값
   const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
@@ -215,22 +219,13 @@ const SafetyMap = () => {
       }
     };
 
-    const cctvGrade = getGrade(nearbyCCTV, 'cctv');
-    const lightGrade = getGrade(nearbyLights, 'light');
+    const calculatedCctvGrade = getGrade(nearbyCCTV, 'cctv');
+    const calculatedLightGrade = getGrade(nearbyLights, 'light');
 
-    alert(`
-      [${address}] 분석 결과
-            
-      반경 100m CCTV: ${nearbyCCTV}개 (등급: ${cctvGrade})
-      반경 100m 가로등: ${nearbyLights}개 (등급: ${lightGrade})
-      
-      결과 페이지로 데이터를 넘깁니다.
-    `);
-
-    // 실제 이동 코드 (주석 해제 후 사용)
-    // navigate('/result', {
-    //   state: { address, cctvGrade, lightGrade, cctvCount: nearbyCCTV, lightCount: nearbyLights }
-    // });
+    // 결과 상태 업데이트
+    setCctvGrade(calculatedCctvGrade);
+    setLightGrade(calculatedLightGrade);
+    setShowScore(true);
   };
 
   return (
@@ -252,27 +247,45 @@ const SafetyMap = () => {
 
       {/* 하단 UI */}
       <div className="absolute bottom-0 left-0 z-20 w-full px-4 pb-8 pt-2 bg-white">
-        <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
-          <div className="flex justify-between items-center px-10">
-            <div
-              onClick={() => setShowCCTV(!showCCTV)}
-              className={`flex flex-col items-center gap-1 cursor-pointer ${showCCTV ? 'opacity-100 ' : 'opacity-30 '}`}>
-              <div className="w-5 h-5 rounded-full bg-[#2196F3]"></div>
-              <Txt className="text-sm">CCTV 구역</Txt>
+        {!showScore ? (
+          <>
+            <div className="bg-white rounded-2xl p-4 mb-3 text-xs">
+              <div className="flex justify-between items-center px-10">
+                <div
+                  onClick={() => setShowCCTV(!showCCTV)}
+                  className={`flex flex-col items-center gap-1 cursor-pointer ${showCCTV ? 'opacity-100 ' : 'opacity-30 '}`}>
+                  <div className="w-5 h-5 rounded-full bg-[#2196F3]"></div>
+                  <Txt className="text-sm">CCTV 구역</Txt>
+                </div>
+
+                <div
+                  onClick={() => setShowLight(!showLight)}
+                  className={`flex flex-col items-center gap-1 cursor-pointer ${showLight ? 'opacity-100 ' : 'opacity-30 '}`}>
+                  <div className="w-5 h-5 rounded-full bg-[#FFEE58]"></div>
+                  <Txt className="text-sm">가로등 구역</Txt>
+                </div>
+              </div>
             </div>
 
-            <div
-              onClick={() => setShowLight(!showLight)}
-              className={`flex flex-col items-center gap-1 cursor-pointer ${showLight ? 'opacity-100 ' : 'opacity-30 '}`}>
-              <div className="w-5 h-5 rounded-full bg-[#FFEE58]"></div>
-              <Txt className="text-sm">가로등 구역</Txt>
-            </div>
-          </div>
-        </div>
-
-        <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
-          세부 점수 보기
-        </Button>
+            <Button className="w-full bg-Semi-Red text-white" onClick={handleShowDetail}>
+              세부 점수 보기
+            </Button>
+          </>
+        ) : (
+          <>
+            <SafetyScoreCard lightGrade={lightGrade} cctvGrade={cctvGrade} />
+            <Button
+              className="w-full bg-Semi-Red text-white"
+              onClick={() => {
+                // 다음 페이지로 이동
+                navigate('/result', {
+                  state: { address, cctvGrade, lightGrade },
+                });
+              }}>
+              최종 결과 보기
+            </Button>
+          </>
+        )}
       </div>
 
       <div ref={mapContainer} className="absolute top-[120px] left-0 right-0 bottom-[180px] w-full z-10" />
