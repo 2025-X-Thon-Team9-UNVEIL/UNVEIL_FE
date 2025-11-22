@@ -12,4 +12,6 @@ export const lazyRoutes = {
   MeasurePage: React.lazy(() => import('../pages/MeasurePage/MeasurePage.tsx')),
   SoundPage: React.lazy(() => import('../pages/SoundPage/SoundPage.tsx')),
   ResultPage: React.lazy(() => import('../pages/ResultPage/ResultPage.tsx')),
+  OnboardingPage: React.lazy(() => import('../pages/OnboardingPage/OnboardingPage.tsx')),
+  FirstPage: React.lazy(() => import('../pages/FirstPage/FirstPage.tsx')),
 };
