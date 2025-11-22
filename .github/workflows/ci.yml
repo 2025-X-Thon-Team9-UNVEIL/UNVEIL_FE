@@ -17,7 +17,7 @@ jobs:
     - name: Node.js 설치
       uses: actions/setup-node@v3
       with:
-        node-version: '18' # 본인 프로젝트 버전에 맞게 수정 (보통 18이나 20)
+        node-version: '20' # 본인 프로젝트 버전에 맞게 수정 (보통 18이나 20)
 
     - name: 패키지 설치 (npm install)
       run: npm install
