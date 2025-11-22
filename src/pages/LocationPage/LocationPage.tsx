@@ -134,7 +134,7 @@ const KakaoMap = () => {
   };
 
   return (
-    <div className="relative h-screen w-[402px]">
+    <div className="relative h-screen w-[402px] pt-[47px]">
       <div className="absolute top-0 left-0 z-20 w-full bg-white px-6 pt-12 pb-8 flex flex-col gap-4">
         <div className="relative">
           <Input
