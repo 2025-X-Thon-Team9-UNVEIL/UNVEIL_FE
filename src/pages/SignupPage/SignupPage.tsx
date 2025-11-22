@@ -42,8 +42,8 @@ export default function SignUpPage() {
   return (
     <main className="flex flex-col items-center min-h-screen pt-[47px]">
       {/* 로고 */}
-      <div className="flex items-center gap-2 mb-11">
-        <img src="/icons/logo.svg" alt="로고" className="w-45" />
+      <div className="flex items-center gap-1.5 mb-5">
+        <img src="/icons/logo.svg" alt="로고" className="w-40" />
       </div>
 
       {/* 폼 컨테이너 */}

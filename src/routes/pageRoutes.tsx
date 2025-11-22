@@ -18,6 +18,8 @@ export const publicRoutes: RouteObject[] = [
       { path: 'safety', element: <lazyRoutes.SafetyPage /> },
       { path: 'sound', element: <lazyRoutes.SoundPage /> },
       { path: 'result', element: <lazyRoutes.ResultPage /> },
+      { path: 'onboarding', element: <lazyRoutes.OnboardingPage /> },
+      { path: 'first', element: <lazyRoutes.FirstPage /> },
     ],
   },
 ];

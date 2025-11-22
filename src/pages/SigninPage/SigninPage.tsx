@@ -33,7 +33,7 @@ export default function SigninPage() {
     <main className="flex flex-col items-center min-h-screen pt-[91px]">
       {/* 로고 */}
       <div className="flex items-center gap-2 ">
-        <img src="/icons/logo.svg" alt="로고" className="w-45" />
+        <img src="/icons/logo.svg" alt="로고" className="w-40" />
       </div>
 
       {/* 폼 컨테이너 */}
