@@ -3,7 +3,7 @@ import Txt, { fontMap } from '@/components/atoms/Text';
 import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
 
 const BgColor = {
-  blue: 'bg-Main-Blue',
+  blue: 'bg-Banner-Blue',
   gray: 'bg-Background',
   white: 'bg-white',
 } as const;
