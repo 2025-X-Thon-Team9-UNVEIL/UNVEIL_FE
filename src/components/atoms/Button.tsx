@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import Txt, { fontMap } from '@/components/atoms/Text';
-import type { ButtonHTMLAttributes, PropsWithChildren } from 'react';
+import type { ComponentPropsWithoutRef, PropsWithChildren } from 'react';
 
 const BgColor = {
   blue: 'bg-Banner-Blue',
@@ -8,7 +8,7 @@ const BgColor = {
   white: 'bg-white',
 } as const;
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<ComponentPropsWithoutRef<'button'>, 'style'> {
   color?: keyof typeof BgColor;
   textWeight?: keyof typeof fontMap;
   textClassName?: string;

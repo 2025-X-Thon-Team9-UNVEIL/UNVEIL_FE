@@ -1,11 +1,11 @@
 import { cn } from '@/lib/utils';
-import type { HTMLAttributes, PropsWithChildren } from 'react';
+import type { ComponentPropsWithoutRef, PropsWithChildren } from 'react';
 
 type Props = {
   className?: string;
   size?: number;
   weight?: keyof typeof fontMap;
-} & HTMLAttributes<HTMLSpanElement>;
+} & Omit<ComponentPropsWithoutRef<'span'>, 'style'>;
 
 export const fontMap = {
   semibold: 'font-[AppleSDGothicNeoSB]',
