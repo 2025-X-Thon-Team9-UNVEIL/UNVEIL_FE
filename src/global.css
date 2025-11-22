@@ -151,7 +151,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 }
 
 body {
-  @apply flex h-screen items-center justify-center overflow-hidden antialiased;
+  @apply flex h-screen items-center justify-center antialiased;
 }
 
 /* 스크롤바 숨기기 유틸 */
