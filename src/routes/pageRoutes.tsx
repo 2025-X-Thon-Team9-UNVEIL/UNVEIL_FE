@@ -1,4 +1,4 @@
-import { createBrowserRouter, type RouteObject } from 'react-router-dom';
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router-dom';
 import { lazyRoutes } from './routes';
 import HomeLayout from '@/layouts/HomeLayout';
 import ProtectedLayout from '@/layouts/ProtectedLayout';
@@ -9,7 +9,8 @@ export const publicRoutes: RouteObject[] = [
     element: <HomeLayout />,
     errorElement: <lazyRoutes.NotFoundPage />,
     children: [
-      { index: true, element: <lazyRoutes.MainPage /> },
+      { index: true, element: <Navigate to="/onboarding" replace /> },
+      { path: 'main', element: <lazyRoutes.MainPage /> },
       { path: 'test', element: <lazyRoutes.TestPage /> },
       { path: 'location', element: <lazyRoutes.LocationPage /> },
       { path: 'signin', element: <lazyRoutes.SigninPage /> },

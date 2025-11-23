@@ -23,8 +23,7 @@ export default function SigninPage() {
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
 
-      alert('로그인 성공!');
-      navigate('/');
+      navigate('/main');
     } catch (err) {
       console.error(err);
       setError('이메일 또는 비밀번호를 확인해주세요.');

@@ -135,11 +135,7 @@ const LocationPage = () => {
 
   return (
     <div className="w-[341px] flex min-h-screen flex-col bg-white">
-      {/* 로고 */}
-      <div className="flex items-center gap-2 pt-15">
-        <img src="/icons/logo.svg" alt="로고" className="w-30" />
-      </div>
-      <Txt weight="bold" className="text-base mt-4 mb-8 text-left">
+      <Txt weight="bold" className="text-[22px] mt-4 mb-8 text-left">
         보이지 않던 자취 리스크,
         <br />
         이제는 미리 보고 고르세요.

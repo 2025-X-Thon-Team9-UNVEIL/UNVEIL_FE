@@ -10,7 +10,7 @@ interface MeasureItemProps {
 
 export default function MeasureItem({ address, totalGrade, noiseGrade, lightGrade, cctvGrade }: MeasureItemProps) {
   return (
-    <div className="w-[350px] h-[141px] flex rounded-xl bg-white shadow-[0_0_4px_0_rgba(0,0,0,0.15)] p-4 mb-6">
+    <div className="w-[350px] h-full flex rounded-xl bg-white shadow-[0_0_4px_0_rgba(0,0,0,0.15)] p-4 mb-6">
       <div className="flex items-center gap-5">
         {/* 등급 아이콘 */}
         <div className="w-[85px] h-[85px] rounded-xl bg-Semi-Red flex items-center justify-center flex-shrink-0">
