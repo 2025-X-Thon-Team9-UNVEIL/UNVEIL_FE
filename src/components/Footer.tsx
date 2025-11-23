@@ -4,7 +4,7 @@ import Txt from '@/components/atoms/Text';
 export default function Footer() {
   const navItems = [
     {
-      path: '/',
+      path: '/main',
       label: '홈',
       icon: '/icons/homefoot.svg',
     },
