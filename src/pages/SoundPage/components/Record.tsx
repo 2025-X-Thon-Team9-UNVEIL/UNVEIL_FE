@@ -185,17 +185,7 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
         <div className="text-gray-400 text-xl font-mono mb-10">{timer}</div>
 
         {/* 파형 비주얼라이저 (더미 UI - 실제 연동하려면 Canvas 필요) */}
-        <div className="w-full h-12 flex items-center justify-center gap-1 mb-20 overflow-hidden">
-          {isRecording ? (
-            /* 녹음 중일 때 움직이는 애니메이션 (CSS로 구현 가능) */
-            Array.from({ length: 30 }).map((_, i) => (
-              <div key={i} className="w-1 bg-red-400 animate-pulse" style={{ height: `${Math.random() * 100}%` }}></div>
-            ))
-          ) : (
-            /* 대기 상태 점선 */
-            <div className="text-red-300 tracking-widest">............................................</div>
-          )}
-        </div>
+    
 
         {/* 녹음 버튼 */}
         <button
