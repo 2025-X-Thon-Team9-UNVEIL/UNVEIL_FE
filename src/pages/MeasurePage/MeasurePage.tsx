@@ -80,7 +80,7 @@ export default function MeasurePage() {
       </header>
 
       {/* 측정 목록 */}
-      <main className="flex-1 px-5 pt-18 pb-20">
+      <main className="flex-1 px-5 pt-5 pb-20">
         {measurements.length === 0 ? (
           <Txt weight="medium" className="text-xl">
             측정한 내역이 없습니다

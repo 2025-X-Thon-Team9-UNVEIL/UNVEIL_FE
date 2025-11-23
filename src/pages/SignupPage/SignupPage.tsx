@@ -32,7 +32,6 @@ export default function SignUpPage() {
 
     try {
       await signUp({ email, password });
-      alert('회원가입이 완료되었습니다!');
       navigate('/signin');
     } catch (err) {
       console.error(err);

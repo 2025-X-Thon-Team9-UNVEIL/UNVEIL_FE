@@ -8,7 +8,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/first');
-    }, 5000); // 5초 후 FirstPage로 이동
+    }, 3000); // 3초 후 FirstPage로 이동
 
     return () => clearTimeout(timer);
   }, [navigate]);
