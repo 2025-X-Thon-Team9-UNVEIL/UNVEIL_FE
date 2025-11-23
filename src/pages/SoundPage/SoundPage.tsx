@@ -6,9 +6,6 @@ import RankCard from './components/RankCard';
 import { useNavigate } from 'react-router-dom';
 import Txt from '@/components/atoms/Text';
 
-// 스타일링을 위한 컴포넌트들 (가정)
-// import Header from '@/components/Header';
-// import Button from '@/components/Button';
 
 const SoundPage = () => {
   const [rank, setRank] = useState<string | null>(null);

@@ -12,7 +12,6 @@ function App() {
       <div className="pt-[47px]">
         <RouterProvider router={router} />
       </div>
-      {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   );
 }

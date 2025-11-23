@@ -9,6 +9,48 @@ import speakerIcon from '@/assets/icon-speaker.svg';
 import { useLocation, useNavigate } from 'react-router-dom';
 import arrowIcon from '@/assets/icon-arrow-left.svg';
 
+import { Mic, AudioLines, RotateCcw } from 'lucide-react';
+
+const COLORS = {
+  primary: '#FF6B6B', // 메인 코랄 핑크
+  primarySoft: 'rgba(13, 9, 9, 0.2)', // 연한 파동 색상
+  secondary: '#FF8E8E',
+  bg: '#FFFFFF',
+  text: '#333333',
+  gray: '#F3F4F6',
+};
+
+const RecordingVisualizer = ({ isRecording, progress }: { isRecording: boolean; progress: number }) => {
+  return (
+    <div className="relative flex items-center justify-center w-64 h-64">
+      {/* 배경 파동 애니메이션 (토스 스타일의 은은한 퍼짐) */}
+      {isRecording && (
+        <>
+          <div className="absolute w-full h-full rounded-full bg-red-400 opacity-20 animate-ping-slow" />
+          <div className="absolute w-[80%] h-[80%] rounded-full bg-red-400 opacity-20 animate-ping-slower delay-75" />
+        </>
+      )}
+
+      {/* 6초 프로그레스 서클 (SVG) */}
+      <svg className="absolute w-full h-full rotate-[-90deg]" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="46" fill="none" stroke={COLORS.gray} strokeWidth="4" />
+        <circle
+          cx="50"
+          cy="50"
+          r="46"
+          fill="none"
+          stroke={COLORS.primary}
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeDasharray="289.02" // 2 * PI * r (46)
+          strokeDashoffset={289.02 - (289.02 * progress) / 100}
+          className="transition-all duration-100 ease-linear"
+        />
+      </svg>
+    </div>
+  );
+};
+
 // 스타일링을 위한 컴포넌트들 (가정)
 // import Header from '@/components/Header';
 // import Button from '@/components/Button';
@@ -26,6 +68,8 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
   const [timer, setTimer] = useState('00:00.00');
   const [status, setStatus] = useState('측정 대기 중');
 
+
+   const RECORDING_DURATION = 5700;
   // 레퍼런스 설정
   const recorderRef = useRef<RecordRTC | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -51,6 +95,9 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
       );
     }, 10);
   };
+
+  //uuiu
+   const [progress, setProgress] = useState(0); // 0 ~ 100%
 
   const stopTimer = () => {
     if (timerIntervalRef.current) {
@@ -178,32 +225,69 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
     }
   };
 
+  const handleReset = () => {
+    setAudioUrl(null);
+    setProgress(0);
+    setStatus('버튼을 눌러 측정을 시작하세요');
+  };
+
   return (
-    <div className="flex flex-col h-screen bg-white">
+    <div className="flex flex-col h-screen w-full bg-white font-sans overflow-hidden relative px-6">
+      <style>{`
+        @keyframes ping-slow {
+          0% { transform: scale(0.8); opacity: 0.8; }
+          100% { transform: scale(2); opacity: 0; }
+        }
+        @keyframes ping-slower {
+          0% { transform: scale(0.8); opacity: 0.6; }
+          100% { transform: scale(2.5); opacity: 0; }
+        }
+        .animate-ping-slow { animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite; }
+        .animate-ping-slower { animation: ping-slower 3s cubic-bezier(0, 0, 0.2, 1) infinite; }
+      `}</style>
+
+      <header className="flex items-center p-6 pb-2">
+        <button className="text-gray-400 text-lg">←</button>
+      </header>
+
       <main className="flex flex-col items-center  flex-1 px-6">
         {/* 타이머 */}
         <div className="text-gray-400 text-xl font-mono mb-10">{timer}</div>
+        {/* 메인 인터랙티브 UI 영역 */}
+        <div className="relative flex items-center justify-center">
+          {/* 1. 배경 비주얼라이저 (녹음 중일 때만 파동 & 타이머 보임) */}
+          <div className={`absolute transition-opacity duration-500 ${isRecording ? 'opacity-100' : 'opacity-0'}`}>
+            <RecordingVisualizer isRecording={isRecording} progress={progress} />
+          </div>
 
-        {/* 파형 비주얼라이저 (더미 UI - 실제 연동하려면 Canvas 필요) */}
-    
+          {/* 2. 중앙 메인 버튼 */}
+          <button
+            onClick={audioUrl ? handleReset : handleStartRecording}
+            disabled={isRecording}
+            className={`
+              relative z-10 w-24 h-24 rounded-full flex items-center justify-center
+              transition-all duration-300
+              ${
+                isRecording
+                  ? 'bg-white border-4 border-[#FF6B6B] shadow-none cursor-default scale-95' // 녹음 중: 그림자 제거, 크기 약간 축소, 클릭 금지 커서
+                  : audioUrl
+                    ? 'bg-[#FF6B6B] text-white shadow-xl hover:scale-105 active:scale-95' // 완료
+                    : 'bg-[#FF6B6B] text-white shadow-xl hover:scale-105 active:scale-95' // 대기
+              }
+            `}>
+            {/* 아이콘 스위칭 */}
+            {isRecording ? (
+              // 녹음 중일 때: 정지 버튼(네모) 대신 '소리 파형' 아이콘 사용
+              <AudioLines size={32} fill="#FF6B6B" color="#FF6B6B" className="animate-pulse opacity-80" />
+            ) : audioUrl ? (
+              <AudioLines size={32} /> // 다시하기 아이콘
+            ) : (
+              <Mic size={36} />
+            )}
+          </button>
+        </div>
 
-        {/* 녹음 버튼 */}
-        <button
-          onClick={handleStartRecording}
-          disabled={isRecording}
-          className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
-            isRecording ? 'border-gray-300 bg-white' : 'border-gray-300 bg-white'
-          }`}>
-          <div
-            className={`rounded transition-all ${
-              isRecording
-                ? 'w-8 h-8 bg-red-500 rounded-sm' // 정지 아이콘 (네모)
-                : 'w-10 h-10 bg-red-500 rounded-full' // 녹음 아이콘 (원)
-            }`}
-          />
-        </button>
-        <p className="mt-4 text-gray-500 text-sm">{status}</p>
-
+        {/* 하단 설명 텍스트 (녹음 중일 때 페이드 인) */}
         {/*  녹음이 끝나면 나타나는 확인용 플레이어 & 다운로드 버튼 */}
         {show_download && audioUrl && (
           <div className="mt-8 p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col items-center gap-4">
