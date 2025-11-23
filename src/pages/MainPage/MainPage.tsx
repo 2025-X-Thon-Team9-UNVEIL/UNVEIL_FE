@@ -11,7 +11,7 @@ export default function MainPage() {
   };
 
   return (
-    <div className="flex flex-col bg-white -mt-[47px]">
+    <div className="flex flex-col bg-white -mt-[70px]">
       <div className="flex flex-col items-center flex-1 pt-0">
         <Txt weight="bold" className="w-[341px] text-2xl mb-8 text-left">
           보이지 않던 자취 리스크,
