@@ -17,9 +17,11 @@ export default function SigninPage() {
     setError('');
     try {
       const data = await login({ email, password });
+      // console.log('서버 응답 데이터:', data);
 
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
+      const { accessToken, refreshToken } = data.result;
+      localStorage.setItem('accessToken', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
 
       alert('로그인 성공!');
       navigate('/');

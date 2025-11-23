@@ -10,12 +10,18 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface AuthResponse {
+export interface TockenData {
   accessToken: string;
   refreshToken: string;
   tokenType: string;
   accessTokenExpiresIn: number;
   refreshTokenExpiresIn: number;
+}
+
+export interface AuthResponse {
+  errorCode: string | null;
+  message: string;
+  result: TockenData;
 }
 
 export const signUp = async (data: SignUpRequest) => {
