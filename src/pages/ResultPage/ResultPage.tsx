@@ -4,7 +4,7 @@ import Txt from '@/components/atoms/Text';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TriangleGradeCard, { calculateTotalGrade } from './components/TriangleGradeCard';
 import Footer from '@/components/Footer';
-import { api } from '@/apis/axios.ts';
+import { registerLocation } from '@/apis/location';
 
 export default function ResultPage() {
   const navigate = useNavigate();
@@ -30,20 +30,23 @@ export default function ResultPage() {
 
     setIsLoading(true);
 
-    const response = await api.post('/api/location', {
-      address,
-      noiseLevel,
-      cctvLevel: cctvGrade,
-      streetlightLevel: lightGrade,
-      score: totalGrade,
-    });
-    console.log(response.data);
+    try {
+      const response = await registerLocation({
+        address,
+        noiseLevel,
+        streetlightLevel: lightGrade,
+        cctvLevel: cctvGrade,
+        score: totalGrade,
+      });
+      console.log(response);
 
-    // 임시로 성공 처리
-    setTimeout(() => {
       setIsSaved(true);
+    } catch (error) {
+      console.error('위치 등록 실패:', error);
+      alert('측정 결과 추가에 실패했습니다.');
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (

@@ -42,11 +42,12 @@ export default function MeasurePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getLocationList(0, 100);
+        const responseData = await getLocationList(0, 100);
 
-        if (data && data.locationList) {
+        if (responseData?.result?.locationList) {
+          const locationList = responseData.result.locationList;
           // 서버 데이터(Level) -> 화면 데이터(Grade) 매핑
-          const mappedData = data.locationList.map((item, index) => ({
+          const mappedData = locationList.map((item, index) => ({
             id: index,
             address: item.address,
             noiseGrade: item.noiseLevel,
