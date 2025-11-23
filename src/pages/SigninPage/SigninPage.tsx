@@ -22,6 +22,7 @@ export default function SigninPage() {
       const { accessToken, refreshToken } = data.result;
       localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('userEmail', email);
 
       alert('로그인 성공!');
       navigate('/');
