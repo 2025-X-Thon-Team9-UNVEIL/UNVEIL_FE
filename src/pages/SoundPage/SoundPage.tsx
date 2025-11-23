@@ -3,6 +3,7 @@ import speakerIcon from '@/assets/icon-speaker.svg';
 import arrowIcon from '@/assets/icon-arrow-left.svg';
 import Record from './components/Record';
 import RankCard from './components/RankCard';
+import { useNavigate } from 'react-router-dom';
 
 // 스타일링을 위한 컴포넌트들 (가정)
 // import Header from '@/components/Header';
@@ -10,6 +11,7 @@ import RankCard from './components/RankCard';
 
 const SoundPage = () => {
   const [rank, setRank] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleAnalysisComplete = (newRank: string) => {
     setRank(newRank); // 상태가 업데이트되면 화면이 리렌더링되면서 RankCard가 보입니다.
@@ -19,8 +21,8 @@ const SoundPage = () => {
     <div className="flex flex-col h-screen bg-white">
       {/* 상단 헤더 (뒤로가기 등) */}
       <header className="flex items-center p-4 mb-[31px]">
-        <button className="text-xl">
-          <img src={arrowIcon} alt="Back" className="w-[8px] h-[16px]" />
+        <button className="text-xl" onClick={() => navigate(-1)}>
+          <img src="/icons/back.svg" alt="Back" className="w-[12px] h-[16px]" />
         </button>
         <h1 className="ml-[135px] text-[20px]">소음 측정</h1>
       </header>

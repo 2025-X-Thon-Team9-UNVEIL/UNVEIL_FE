@@ -4,6 +4,7 @@ import Txt from '@/components/atoms/Text';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TriangleGradeCard, { calculateTotalGrade } from './components/TriangleGradeCard';
 import Footer from '@/components/Footer';
+import { api } from '@/apis/axios.ts';
 
 export default function ResultPage() {
   const navigate = useNavigate();
@@ -24,20 +25,19 @@ export default function ResultPage() {
   const totalGrade = calculateTotalGrade(noiseLevel, cctvGrade, lightGrade);
 
   // 측정 목록에 추가 핸들러
-  const handleAddToList = () => {
+  const handleAddToList = async () => {
     if (isSaved || isLoading) return;
 
     setIsLoading(true);
 
-    // TODO: 백엔드 연결
-    // 백엔드로 데이터 전송
-    // await axiosInstance.post('/measurements', {
-    //   address,
-    //   soundGrade,
-    //   cctvGrade,
-    //   lightGrade,
-    //   totalGrade,
-    // });
+    const response = await api.post('/api/location', {
+      address,
+      noiseLevel,
+      cctvLevel: cctvGrade,
+      streetlightLevel: lightGrade,
+      score: totalGrade,
+    });
+    console.log(response.data);
 
     // 임시로 성공 처리
     setTimeout(() => {
@@ -63,7 +63,7 @@ export default function ResultPage() {
       </div>
 
       {/* 삼각형 등급 카드 */}
-      <div className="pt-[170px] pb-8">
+      <div className="pt-[170px] pb-2">
         <TriangleGradeCard
           soundGrade={noiseLevel}
           cctvGrade={cctvGrade}
