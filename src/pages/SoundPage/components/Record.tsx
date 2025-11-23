@@ -89,12 +89,17 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
       recorderRef.current.startRecording();
       startTimer();
       setIsRecording(true);
-      setStatus('녹음 중... 소리가 재생됩니다.');
+      setStatus('데이터 수집 중... 잠시만 기다려주세요.');
       console.log('마이크 권한 획득 및 녹음 시작');
 
       // 4. 0.5초 뒤 테스트 사운드 재생 (녹음기가 켜진 후 소리가 나야 함)
       setTimeout(() => {
         testAudio.current.play().catch((e) => console.error('오디오 재생 실패', e));
+
+        setTimeout(() => {
+          // 테스트 사운드가 재생되고 5.2초 뒤 실행 (녹음 종료)
+          handleStopRecording();
+        }, 5200);
       }, 500);
       console.log('녹음 시작');
     } catch (error) {
@@ -163,9 +168,9 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
       );
 
       console.log('업로드 성공:', response.data);
-    const resultRank = response.data.result.grade;
+      const resultRank = response.data.result.grade;
       console.log('등급:', resultRank);
-        onAnalysisComplete(resultRank); // 부모 컴포넌트에 등급 전달
+      onAnalysisComplete(resultRank); // 부모 컴포넌트에 등급 전달
       setStatus('분석 완료!');
     } catch (error) {
       console.error('업로드 실패:', error);
@@ -188,13 +193,14 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
             ))
           ) : (
             /* 대기 상태 점선 */
-            <div className="text-red-300 tracking-widest">................................</div>
+            <div className="text-red-300 tracking-widest">............................................</div>
           )}
         </div>
 
         {/* 녹음 버튼 */}
         <button
-          onClick={isRecording ? handleStopRecording : handleStartRecording}
+          onClick={handleStartRecording}
+          disabled={isRecording}
           className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
             isRecording ? 'border-gray-300 bg-white' : 'border-gray-300 bg-white'
           }`}>
@@ -208,7 +214,7 @@ const Record = ({ onAnalysisComplete }: RecordProps) => {
         </button>
         <p className="mt-4 text-gray-500 text-sm">{status}</p>
 
-        {/* 👇 [추가] 녹음이 끝나면 나타나는 확인용 플레이어 & 다운로드 버튼 */}
+        {/*  녹음이 끝나면 나타나는 확인용 플레이어 & 다운로드 버튼 */}
         {show_download && audioUrl && (
           <div className="mt-8 p-4 border border-gray-300 rounded-lg bg-gray-50 flex flex-col items-center gap-4">
             <p className="font-bold text-sm text-gray-600">녹음 결과 확인 (백엔드 전송 전)</p>
