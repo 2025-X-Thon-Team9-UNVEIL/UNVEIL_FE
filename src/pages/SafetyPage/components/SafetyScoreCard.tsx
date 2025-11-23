@@ -7,7 +7,7 @@ interface SafetyScoreCardProps {
 
 export default function SafetyScoreCard({ lightGrade, cctvGrade }: SafetyScoreCardProps) {
   return (
-    <div className="bg-white rounded-xl shadow-[0_0_4px_0_rgba(0,0,0,0.15)] p-6">
+    <div className="bg-white rounded-xl shadow-[0_0_4px_0_rgba(0,0,0,0.15)] p-6 mb-4">
       <div className="flex items-center justify-between gap-4">
         {/* 가로등 */}
         <div className="flex-1 flex flex-col items-center gap-3">
