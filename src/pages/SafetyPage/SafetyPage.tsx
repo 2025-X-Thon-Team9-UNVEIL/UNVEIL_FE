@@ -51,6 +51,7 @@ const SafetyMap = () => {
 
   // 1. LocationPage에서 전달받은 주소 또는 기본값
   const address = (location.state as { address?: string } | null)?.address || '서울특별시 종로구 인사동5길 20';
+  const noiseLevel = (location.state as { noiseLevel?: string } | null)?.noiseLevel || 'A';
   // 2. [변경] targetLocation을 상태(State)로 변경 (초기값은 null 또는 기본값)
   const [targetLocation, setTargetLocation] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -234,7 +235,7 @@ const SafetyMap = () => {
                 onClick={() => {
                   // 다음 페이지로 이동
                   navigate('/result', {
-                    state: { address, cctvGrade, lightGrade },
+                    state: { address, noiseLevel, cctvGrade, lightGrade },
                   });
                 }}>
                 최종 결과 보기

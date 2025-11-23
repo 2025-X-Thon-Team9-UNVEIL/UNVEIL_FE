@@ -4,6 +4,7 @@ import Txt from '@/components/atoms/Text';
 import { useNavigate, useLocation } from 'react-router-dom';
 import TriangleGradeCard, { calculateTotalGrade } from './components/TriangleGradeCard';
 import Footer from '@/components/Footer';
+import { api } from '@/apis/axios.ts';
 
 export default function ResultPage() {
   const navigate = useNavigate();
@@ -13,30 +14,30 @@ export default function ResultPage() {
 
   // SafetyPage에서 전달받은 데이터
   const address = (location.state as { address?: string } | null)?.address || '';
+  const noiseLevel = (location.state as { noiseLevel?: string } | null)?.noiseLevel || 'A';
   const cctvGrade = (location.state as { cctvGrade?: string } | null)?.cctvGrade || 'F';
   const lightGrade = (location.state as { lightGrade?: string } | null)?.lightGrade || 'F';
 
   // 음향 등급 더미 데이터 (실제로는 음향 측정 결과를 받아와야 함)
-  const soundGrade = 'B'; // 더미 데이터
+  //const soundGrade = 'B'; // 더미 데이터
 
   // 최종 등급 계산
-  const totalGrade = calculateTotalGrade(soundGrade, cctvGrade, lightGrade);
+  const totalGrade = calculateTotalGrade(noiseLevel, cctvGrade, lightGrade);
 
   // 측정 목록에 추가 핸들러
-  const handleAddToList = () => {
+  const handleAddToList = async () => {
     if (isSaved || isLoading) return;
 
     setIsLoading(true);
 
-    // TODO: 백엔드 연결
-    // 백엔드로 데이터 전송
-    // await axiosInstance.post('/measurements', {
-    //   address,
-    //   soundGrade,
-    //   cctvGrade,
-    //   lightGrade,
-    //   totalGrade,
-    // });
+    const response = await api.post('/api/location', {
+      address,
+      noiseLevel,
+      cctvLevel: cctvGrade,
+      streetlightLevel: lightGrade,
+      score: totalGrade,
+    });
+    console.log(response.data);
 
     // 임시로 성공 처리
     setTimeout(() => {
@@ -62,9 +63,9 @@ export default function ResultPage() {
       </div>
 
       {/* 삼각형 등급 카드 */}
-      <div className="pt-[170px] pb-8">
+      <div className="pt-[170px] pb-2">
         <TriangleGradeCard
-          soundGrade={soundGrade}
+          soundGrade={noiseLevel}
           cctvGrade={cctvGrade}
           lightGrade={lightGrade}
           totalGrade={totalGrade}

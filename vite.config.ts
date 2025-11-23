@@ -25,7 +25,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://43.200.133.8:8080',
+        target: 'https://concentration-up.site',
         changeOrigin: true,
         secure: false,
       },
