@@ -20,7 +20,7 @@ const RANK_DETAILS: Record<
     grade: 'A',
     title: '흡음 환경 (Safe)',
     desc: '소음이 잘 차단되는 매우 조용한 방입니다!',
-    color: 'text-green-500',
+    color: 'text-Semi-Red',
     bgColor: 'bg-green-50',
   },
   B: {
@@ -34,14 +34,14 @@ const RANK_DETAILS: Record<
     grade: 'C',
     title: '가벽/중공벽 의심',
     desc: '벽이 얇아 웅웅거림이 심하고 이웃 소음이 들릴 수 있습니다.',
-    color: 'text-orange-500',
+    color: 'text-Semi-Red',
     bgColor: 'bg-orange-50',
   },
   D: {
     grade: 'D',
     title: '반사성 표면 (Glass/Tile)',
     desc: '욕실이나 창가처럼 소리가 날카롭게 많이 울립니다.',
-    color: 'text-red-600',
+    color: 'text-Semi-Red',
     bgColor: 'bg-red-100',
   },
 };
@@ -65,8 +65,8 @@ const RankCard = ({ rank }: RankCardProps) => {
   };
 
   return (
-    <div className="flex flex-col w-full justify-center">
-      <div className="relative flex w-full  flex-col items-center justify-center rounded-[20px] border border-gray-100 bg-white p-8 shadow-[0_4px_20px_0_rgba(0,0,0,0.05)] mt-[29px]">
+    <div className="flex flex-col w-full justify-center ">
+      <div className="px-[22px] relative flex w-full  flex-col items-center justify-center rounded-[20px] border border-gray-100 bg-white  shadow-[0_4px_20px_0_rgba(0,0,0,0.05)] pt-[31px] pb-[45px]">
         <div className="mb-6 animate-bounce-slow">
           <img src={mikeIcon} alt="Rank Icon" className="h-24 w-24 object-contain" />
         </div>
@@ -74,12 +74,14 @@ const RankCard = ({ rank }: RankCardProps) => {
 
         <div className={`mb-6 text-lg font-bold ${currentRank.color}`}>{currentRank.title}</div>
 
-        <div className={`break-keep text-center text-sm font-medium leading-relaxed ${currentRank.color}`}>
+        <div className={`break-keep text-center text-[20px] font-medium leading-relaxed ${currentRank.color}`}>
           {currentRank.desc}
         </div>
       </div>
 
-      <button className="flex flex-col gap-[1px] w-full text-center text-white bg-Semi-Red rounded-[10px] py-4 mt-6" onClick={handleGoToResult}>
+      <button
+        className="flex flex-col gap-[1px] w-full text-center text-white bg-Semi-Red rounded-[10px] py-4 mt-6"
+        onClick={handleGoToResult}>
         <p className="text-white text-[20px]">안전도 분석 하러가기</p>
         <p className="text-white text-[14px]">가로등과 CCTV가 없는 위치를 확인하세요</p>
       </button>
