@@ -7,14 +7,19 @@ export interface LocationData {
   cctvLevel: string;
   score: string;
 }
-
-export interface LocationListResponse {
+export interface LocationResult {
   locationList: LocationData[];
   listSize: number;
   totalPage: number;
   totalElements: number;
   isFirst: boolean;
   isLast: boolean;
+}
+
+export interface LocationListResponse {
+  errorCode: string | null;
+  message: string;
+  result: LocationResult;
 }
 
 // 1. [GET] 내 위치 목록 조회
